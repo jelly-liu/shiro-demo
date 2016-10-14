@@ -19,6 +19,6 @@ public class AdminSuperServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.getWriter().write("<h1>AdminSuper</h1>");
+        response.getWriter().write("<h1>AdminSuperServlet</h1>");
     }
 }

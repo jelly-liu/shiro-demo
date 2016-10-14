@@ -6,11 +6,6 @@
     <%@ include file="/include/topHead.jsp" %>
 </head>
 <body>
-<h1>index</h1>
-<a href="/admin" >admin</a><br/>
-<a href="/adminSuper" >adminSuper</a><br/>
-<a href="/adminList" >adminList</a><br/>
-<a href="/adminAdd" >adminAdd</a><br/>
-<a href="/adminDelete" >adminDelete</a><br/>
+<h1>Not Authorization</h1>
 </body>
 </html>

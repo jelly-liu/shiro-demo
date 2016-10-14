@@ -17,6 +17,10 @@
             <td><input name="password" type="text" value="123"/></td>
         </tr>
         <tr>
+            <td align="right">Remember Me?</td>
+            <td><input type="checkbox" name="rememberMe" value="true"/></td>
+        </tr>
+        <tr>
             <td colspan="99" align="center">
                 <input type="submit" value="submit"/>${msg}
             </td>

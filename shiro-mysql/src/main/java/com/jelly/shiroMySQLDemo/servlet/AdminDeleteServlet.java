@@ -19,6 +19,6 @@ public class AdminDeleteServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.getWriter().write("<h1>AdminDelete</h1>");
+        response.getWriter().write("<h1>AdminDeleteServlet</h1>");
     }
 }

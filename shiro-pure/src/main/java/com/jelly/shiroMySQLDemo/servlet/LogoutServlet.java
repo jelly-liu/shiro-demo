@@ -1,5 +1,9 @@
 package com.jelly.shiroMySQLDemo.servlet;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,8 +14,8 @@ import java.io.IOException;
 /**
  * Created by jelly on 2016-6-30.
  */
-@WebServlet(value="/admin")
-public class AdminServlet extends HttpServlet {
+@WebServlet(value="/logout")
+public class LogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         this.doPost(request, response);
@@ -19,6 +23,9 @@ public class AdminServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/admin.jsp").forward(request, response);
+        Subject currentUser = SecurityUtils.getSubject();
+        currentUser.logout();
+        request.setAttribute("msg", "user click logout");
+        request.getRequestDispatcher("/").forward(request, response);
     }
 }
