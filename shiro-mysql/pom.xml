@@ -10,8 +10,13 @@
     <packaging>war</packaging>
     <name>shiro-mysql Maven Webapp</name>
     <url>http://maven.apache.org</url>
-    <dependencies>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>4.3.3.RELEASE</version>
+        </dependency>
     </dependencies>
 
     <build>
