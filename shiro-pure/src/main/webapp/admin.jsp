@@ -29,26 +29,26 @@
         <td>101</td>
         <td>lion</td>
         <td>
-            <shiro:hasRole name="adminList">
+            <shiro:hasRole name="roleList">
                 <a href="/adminList" >adminList</a>
             </shiro:hasRole>
-            <shiro:lacksRole name="adminList">
+            <shiro:lacksRole name="roleList">
                 <a href="##" >Sorry</a>
             </shiro:lacksRole>
         </td>
         <td>
-            <shiro:hasRole name="adminAdd">
+            <shiro:hasRole name="roleAdd">
                 <a href="/adminAdd" >adminAdd</a>
             </shiro:hasRole>
-            <shiro:lacksRole name="adminAdd">
+            <shiro:lacksRole name="roleAdd">
                 <a href="##" >Sorry</a>
             </shiro:lacksRole>
         </td>
         <td>
-            <shiro:hasRole name="adminDelete">
+            <shiro:hasRole name="roleDelete">
                 <a href="/adminDelete" >adminDelete</a>
             </shiro:hasRole>
-            <shiro:lacksRole name="adminDelete">
+            <shiro:lacksRole name="roleDelete">
                 <a href="##" >Sorry</a>
             </shiro:lacksRole>
         </td>
