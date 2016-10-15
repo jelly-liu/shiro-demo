@@ -1,7 +1,7 @@
 package com.jelly.shiroMySQLDemo.action;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,13 +18,22 @@ public class LoginLogoutAction {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        Subject subject = SecurityUtils.getSubject();
+        Subject currentUser = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(username,password);
         String msg = null;
+
         try {
-            subject.login(token);
-        } catch (Exception e){
-            msg = "其他异常："+e.getMessage();
+            currentUser.login(token);
+        } catch ( UnknownAccountException uae ) {
+            msg = "UnknownAccount";
+        } catch ( IncorrectCredentialsException ice ) {
+            msg = "IncorrectCredentials";
+        } catch ( LockedAccountException lae ) {
+            msg = "LockedAccount";
+        } catch ( ExcessiveAttemptsException eae ) {
+            msg = "ExcessiveAttempts";
+        }catch ( AuthenticationException ae ) {
+            msg = "Unexpected Reason";
         }
 
         ModelAndView modelAndView = new ModelAndView();
