@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- author:Collonn, Email:collonn@126.com, QQ:195358385 -->
+
+
+<mapper namespace="com.jelly.shiroMySQLDemo.model.TUser">
+	<!-- 生成Insert -->
+        	<insert id="Insert" useGeneratedKeys="true" keyProperty="ID" parameterType="com.jelly.shiroMySQLDemo.model.TUser">
+			insert into T_USER (
+				<trim suffixOverrides=",">
+                            <if test="id != null and id != ''">
+							ID,
+                            </if>
+
+                            <if test="username != null and username != ''">
+							USERNAME,
+                            </if>
+
+                            <if test="password != null and password != ''">
+							PASSWORD,
+                            </if>
+
+				</trim>
+			) values (
+				<trim suffixOverrides=",">
+                            <if test="id != null and id != ''">
+                                #{id},
+                            </if>
+                            <if test="username != null and username != ''">
+                                #{username},
+                            </if>
+                            <if test="password != null and password != ''">
+                                #{password},
+                            </if>
+				</trim>
+			)
+		</insert>
+
+	<!-- 生成Update -->
+    <!-- 注意调用该SQL前必须检查参数的正确性，否则可能会误更新 -->
+	<update id="Update" parameterType="com.jelly.shiroMySQLDemo.model.TUser">
+		update T_USER set 
+		<trim suffixOverrides=",">
+                    <if test="id != null and id != ''">
+                    	ID = #{id},
+                    </if>
+                    <if test="username != null and username != ''">
+                    	USERNAME = #{username},
+                    </if>
+                    <if test="password != null and password != ''">
+                    	PASSWORD = #{password},
+                    </if>
+		</trim>
+        where
+                <if test="id != null and id != ''">
+				ID = #{id}
+                </if>
+            
+	</update>
+
+    <!-- 生成UpdateWithNull -->
+    <!-- 注意调用该SQL前必须先根据主键查询出该记录所有列数据，再设置某列为null -->
+    <update id="UpdateWithNull" parameterType="com.jelly.shiroMySQLDemo.model.TUser">
+        update T_USER set
+        <trim suffixOverrides=",">
+			ID = #{id},
+			USERNAME = #{username},
+			PASSWORD = #{password},
+        </trim>
+        where
+		ID = #{id}
+			
+    </update>
+	
+	<!-- 根据表的主键生成Delete -->
+		<delete id="DeleteByPk" parameterType="java.io.Serializable">
+			
+			delete 
+			from T_USER 
+			where 
+				ID = #{id}
+				
+		</delete>
+	<!-- 注意调用该SQL前必须检查参数的正确性，否则可能会误删除 -->
+	<delete id="DeleteByPojo" parameterType="com.jelly.shiroMySQLDemo.model.TUser">
+		<!-- 请注意，该表没有主键 -->
+		delete
+		from T_USER
+		where
+        <trim suffixOverrides="and">
+                <if test="id != null and id != ''">
+					ID = #{id} and
+                </if>
+                <if test="username != null and username != ''">
+					USERNAME = #{username} and
+                </if>
+                <if test="password != null and password != ''">
+					PASSWORD = #{password} and
+                </if>
+		</trim>
+	</delete>
+
+	<!-- 生成Select通用表头 -->
+	<sql id="SelectColumns">
+		<trim suffixOverrides=",">
+				ID as "id",
+				USERNAME as "username",
+				PASSWORD as "password",
+		</trim>
+	</sql>
+	
+	<!-- 生成Select通用查询条件 -->
+	<sql id="SelectWheres">
+                <if test="id != null and id != ''">
+                    and ID = #{id}
+                </if>
+                <if test="username != null and username != ''">
+                    and USERNAME = #{username}
+                </if>
+                <if test="password != null and password != ''">
+                    and PASSWORD = #{password}
+                </if>
+	</sql>
+	
+	<!-- 生成Select -->
+	<select id="Select" parameterType="com.jelly.shiroMySQLDemo.model.TUser" resultType="com.jelly.shiroMySQLDemo.model.TUser">
+		select
+		<include refid="SelectColumns"/>
+		from T_USER
+		where 1 = 1
+		<include refid="SelectWheres"/>
+	</select>
+
+    <!-- 生成SelectCount -->
+    <select id="SelectCount" parameterType="com.jelly.shiroMySQLDemo.model.TUser" resultType="Long">
+        select count(*) ct
+        from T_USER
+        <where>
+            <include refid="SelectWheres"/>
+        </where>
+    </select>
+
+    <!-- 根据表的主键生成SelectByPk，该表只有单列主键 -->
+	<select id="SelectByPk" parameterType="java.io.Serializable" resultType="com.jelly.shiroMySQLDemo.model.TUser">
+		select
+		<include refid="SelectColumns"/>
+		from T_USER
+		where
+				ID = #{id}
+			
+	</select>
+</mapper>
