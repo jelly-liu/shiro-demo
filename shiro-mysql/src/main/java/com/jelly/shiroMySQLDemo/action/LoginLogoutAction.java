@@ -37,7 +37,7 @@ public class LoginLogoutAction {
         }
 
         ModelAndView modelAndView = new ModelAndView();
-        if(msg!=null){
+        if(msg != null){
             request.setAttribute("msg", msg);
             modelAndView.setViewName("login");
         }else{

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- author:Collonn, Email:collonn@126.com, QQ:195358385 -->
+
+
+<mapper namespace="Shiro">
+    <!-- query roles of user -->
+	<select id="SelectRolesOfUser" parameterType="java.io.Serializable" resultType="com.jelly.shiroMySQLDemo.model.TRole">
+		select
+		<include refid="com.jelly.shiroMySQLDemo.model.TRole.SelectColumns"/>
+		FROM t_user_role a INNER JOIN t_role b
+		WHERE 1 = 1
+		AND a.user_id = #{userId}
+	</select>
+
+	<!-- query permissions of user -->
+	<select id="SelectPermissionsOfUser" parameterType="java.io.Serializable" resultType="com.jelly.shiroMySQLDemo.model.TPermission">
+		select
+		<include refid="com.jelly.shiroMySQLDemo.model.TPermission.SelectColumns"/>
+		FROM t_user_role a
+		INNER JOIN t_role b ON a.role_id = b.id
+		INNER JOIN t_role_permission c ON a.role_id = c.role_id
+		INNER JOIN t_permission d ON c.permission_id = d.id
+		WHERE 1 = 1
+		AND a.user_id = #{userId}
+	</select>
+
+	<!-- query resources of user -->
+	<select id="SelectResourcesOfUser" parameterType="java.io.Serializable" resultType="com.jelly.shiroMySQLDemo.model.TResource">
+		select
+		<include refid="com.jelly.shiroMySQLDemo.model.TResource.SelectColumns"/>
+		FROM t_resource a
+		INNER JOIN t_user_resource b ON a.id = b.user_id
+		WHERE 1 = 1
+		AND b.user_id = #{userId}
+	</select>
+</mapper>

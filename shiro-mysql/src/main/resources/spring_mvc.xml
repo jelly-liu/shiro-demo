@@ -13,10 +13,10 @@
 
     <!-- mvc:default-servlet-handler -->
     <mvc:annotation-driven />
-    <context:component-scan base-package="com.jelly.shiroMySQLDemo" />
+    <context:component-scan base-package="com.jelly.shiroMySQLDemo.action" />
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-        <property name="prefix" value="/" />
+        <property name="prefix" value="/WEB-INF/pages/" />
         <property name="suffix" value=".jsp" />
     </bean>
     <mvc:resources mapping="/static/**" location="/static/" />
