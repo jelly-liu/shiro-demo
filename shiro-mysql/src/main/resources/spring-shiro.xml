@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xsi:schemaLocation="
-        http://www.springframework.org/schema/beans
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/mvc
-        http://www.springframework.org/schema/mvc/spring-mvc.xsd
-        http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context.xsd ">
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
 
-    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+    <bean id="roleOr" class="com.jelly.shiroMySQLDemo.shiro.RoleOrAuthorizationFilter"/>
+
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean" depends-on="roleOr">
         <property name="securityManager" ref="securityManager"/>
-        <property name="loginUrl" value="/login.jsp"/>
+        <property name="loginUrl" value="/toLogin"/>
         <property name="unauthorizedUrl" value="/401.jsp"/>
+        <property name="filters">
+            <util:map>
+                <entry key="roleOr" value-ref="roleOr"/>
+            </util:map>
+        </property>
         <property name="filterChainDefinitions">
             <value>
-                # some example chain definitions:
-                /static/** = anon
+                /static/**=anon
+                /test/**=anon
                 /login=anon
                 /admin=authc
-                /adminList=authc, roles[roleList]
-                /adminAdd=authc, roles[roleAdd]
-                /adminDelete=authc, roles[roleDelete]
-                /adminSuper=authc, roles[roleSuper]
-                # more URL-to-FilterChain definitions here
+                /adminList=authc, roleOr[roleList, roleSuper]
+                /adminAdd=authc, roleOr[roleAdd, roleSuper]
+                /adminDelete=authc, roleOr[roleDelete, roleSuper]
+                /adminSuper=authc, roleOr[roleSuper]
             </value>
         </property>
     </bean>
 
+    <bean id="hashedCredentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+        <property name="hashAlgorithmName" value="MD5"/>
+    </bean>
+
+    <bean id="myAuthorizingRealm" class="com.jelly.shiroMySQLDemo.shiro.MyAuthorizingRealm">
+        <property name="credentialsMatcher" ref="hashedCredentialsMatcher"/>
+    </bean>
+
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-        <!-- Single realm app.  If you have multiple realms, use the 'realms' property instead. -->
-        <property name="realm" ref="myRealm" />
-        <!-- By default the servlet container sessions will be used.  Uncomment this line
-             to use shiro's native sessions (see the JavaDoc for more): -->
-        <!-- <property name="sessionMode" value="native"/> -->
+        <property name="realm" ref="myAuthorizingRealm" />
     </bean>
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 
-    <!-- Define the Shiro Realm implementation you want to use to connect to your back-end -->
-    <!-- security datasource: -->
-    <bean id="myRealm" class="com.jelly.shiroMySQLDemo.shiro.MyRealm"/>
-
-    <!-- Enable Shiro Annotations for Spring-configured beans.  Only run after -->
-    <!-- the lifecycleBeanProcessor has run: -->
     <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor"/>
     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
         <property name="securityManager" ref="securityManager"/>

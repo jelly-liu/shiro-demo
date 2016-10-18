@@ -10,11 +10,15 @@
     <table class="eossFromTable" style="width: 300px; height: 100px;">
         <tr>
             <td align="right">username:</td>
-            <td><input name="username" type="text" value="admin"/></td>
+            <td><input name="name" type="text" value="admin"/></td>
         </tr>
         <tr>
             <td align="right">password:</td>
             <td><input name="password" type="text" value="123"/></td>
+        </tr>
+        <tr>
+            <td align="right">rememberMe:</td>
+            <td><input name="rememberMe" type="checkbox" /></td>
         </tr>
         <tr>
             <td colspan="99" align="center">

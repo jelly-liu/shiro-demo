@@ -20,6 +20,10 @@
 							PASSWORD,
                             </if>
 
+                            <if test="salt != null and salt != ''">
+							SALT,
+                            </if>
+
 				</trim>
 			) values (
 				<trim suffixOverrides=",">
@@ -31,6 +35,9 @@
                             </if>
                             <if test="password != null and password != ''">
                                 #{password},
+                            </if>
+                            <if test="salt != null and salt != ''">
+                                #{salt},
                             </if>
 				</trim>
 			)
@@ -50,6 +57,9 @@
                     <if test="password != null and password != ''">
                     	PASSWORD = #{password},
                     </if>
+                    <if test="salt != null and salt != ''">
+                    	SALT = #{salt},
+                    </if>
 		</trim>
         where
                 <if test="id != null and id != ''">
@@ -66,6 +76,7 @@
 			ID = #{id},
 			USERNAME = #{username},
 			PASSWORD = #{password},
+			SALT = #{salt},
         </trim>
         where
 		ID = #{id}
@@ -97,6 +108,9 @@
                 <if test="password != null and password != ''">
 					PASSWORD = #{password} and
                 </if>
+                <if test="salt != null and salt != ''">
+					SALT = #{salt} and
+                </if>
 		</trim>
 	</delete>
 
@@ -106,6 +120,7 @@
 				ID as "id",
 				USERNAME as "username",
 				PASSWORD as "password",
+				SALT as "salt",
 		</trim>
 	</sql>
 	
@@ -119,6 +134,9 @@
                 </if>
                 <if test="password != null and password != ''">
                     and PASSWORD = #{password}
+                </if>
+                <if test="salt != null and salt != ''">
+                    and SALT = #{salt}
                 </if>
 	</sql>
 	

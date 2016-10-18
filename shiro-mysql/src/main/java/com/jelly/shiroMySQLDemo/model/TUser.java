@@ -22,6 +22,8 @@ public class TUser {
 	private String username;
 	
 	private String password;
+	
+	private String salt;
 
 
 	public TUser setId (String id) {
@@ -49,6 +51,15 @@ public class TUser {
 	
 	public String getPassword () {
 		return this.password;
+	}
+
+	public TUser setSalt (String salt) {
+		this.salt = salt;
+		return this;
+	}
+	
+	public String getSalt () {
+		return this.salt;
 	}
 
 }
