@@ -10,7 +10,7 @@
     <table class="eossFromTable" style="width: 300px; height: 100px;">
         <tr>
             <td align="right">username:</td>
-            <td><input name="name" type="text" value="admin"/></td>
+            <td><input name="username" type="text" value="admin"/></td>
         </tr>
         <tr>
             <td align="right">password:</td>

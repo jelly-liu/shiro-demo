@@ -1,5 +1,9 @@
 package com.jelly.shiroMySQLDemo.action;
 
+import com.jelly.shiroMySQLDemo.model.TResource;
+import com.jelly.shiroMySQLDemo.model.TUser;
+import com.jelly.shiroMySQLDemo.service.ShiroService;
+import com.jelly.shiroMySQLDemo.shiro.MyUsernamePasswordToken;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -11,13 +15,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 public class LoginLogoutAction {
     private final Logger log = LoggerFactory.getLogger(LoginLogoutAction.class);
+
+    @Resource
+    ShiroService shiroService;
 
     @RequestMapping("/toLogin")
     public String toLogin(HttpServletRequest request, HttpServletResponse response){
@@ -26,19 +35,23 @@ public class LoginLogoutAction {
 
     @RequestMapping("/login")
     public ModelAndView admin(HttpServletRequest request, HttpServletResponse response){
-        String username = request.getParameter("name");
+        String username = request.getParameter("username");
         String password = request.getParameter("password");
         String rememberMe = request.getParameter("rememberMe");
 
-        Subject currentUser = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(username,password);
-        String msg = null;
+        TUser user = shiroService.getUserByUsername(username);
 
+        Subject subject = SecurityUtils.getSubject();
+
+        MyUsernamePasswordToken token = new MyUsernamePasswordToken(user.getId(), password);
+        token.setUser(user);
+
+        String msg = null;
         try {
             if(StringUtils.isNotEmpty(rememberMe)){
                 token.setRememberMe(true);
             }
-            currentUser.login(token);
+            subject.login(token);
         } catch (IncorrectCredentialsException e) {
             log.error("IncorrectCredentialsException", e);
             msg = "username or password error!";
@@ -63,12 +76,18 @@ public class LoginLogoutAction {
         } catch (Throwable e){
             msg = "Other Exception!";
         }
+        token.clear();
+
+        //fetch all resources of user
+        List<TResource> resourceList = shiroService.getResourcesOfUser(user.getId());
 
         ModelAndView modelAndView = new ModelAndView();
         if(msg != null){
             request.setAttribute("msg", msg);
             modelAndView.setViewName("login");
         }else{
+            request.setAttribute("resourceList", resourceList);
+            modelAndView.addObject("resourceList", resourceList);
             modelAndView.setViewName("admin");
         }
 

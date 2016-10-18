@@ -20,6 +20,8 @@ public class TResource {
 	private String id;
 	
 	private String reName;
+	
+	private String rePath;
 
 
 	public TResource setId (String id) {
@@ -38,6 +40,15 @@ public class TResource {
 	
 	public String getReName () {
 		return this.reName;
+	}
+
+	public TResource setRePath (String rePath) {
+		this.rePath = rePath;
+		return this;
+	}
+	
+	public String getRePath () {
+		return this.rePath;
 	}
 
 }

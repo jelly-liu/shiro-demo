@@ -1,7 +1,13 @@
 package com.jelly.shiroMySQLDemo.shiro;
 
+import com.jelly.shiroMySQLDemo.model.TPermission;
+import com.jelly.shiroMySQLDemo.model.TRole;
+import com.jelly.shiroMySQLDemo.service.ShiroService;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.crypto.hash.SimpleHash;
@@ -11,10 +17,8 @@ import org.apache.shiro.util.SimpleByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Created by jelly-liu on 2016/10/15.
@@ -22,7 +26,10 @@ import java.util.Set;
 public class MyAuthorizingRealm extends AuthorizingRealm {
     private static final Logger log = LoggerFactory.getLogger(MyAuthorizingRealm.class);
 
-    private Set<String> userNameSet = new HashSet();
+    @Resource
+    ShiroService shiroService;
+
+    /*private Set<String> userNameSet = new HashSet();
     private Map<String, String> userPasswordMap = new HashMap();
     private Map<String, String> userRolesMap = new HashMap();
     private Map<String, String> userPermissionMap = new HashMap();
@@ -49,29 +56,28 @@ public class MyAuthorizingRealm extends AuthorizingRealm {
         userPermissionMap.put("adminList", "admin:list");
         userPermissionMap.put("adminAdd", "admin:add");
         userPermissionMap.put("adminDelete", "admin:delete");
-    }
+    }*/
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        String username = (String)principalCollection.fromRealm(this.getName()).iterator().next();
+        String userId = (String)principalCollection.fromRealm(this.getName()).iterator().next();
         SimpleAuthorizationInfo simpleAuthorInfo = new SimpleAuthorizationInfo();
 
         boolean hasAuthorization = false;
-        String role = userRolesMap.get(username);
-        String permission = userPermissionMap.get(username);
 
-        if(StringUtils.isNotEmpty(role)){
+        List<TRole> roleList = shiroService.getRoleOfUser(userId);
+        List<TPermission> permissionList = shiroService.getPermissionsOfUser(userId);
+
+        if(roleList != null && roleList.size() > 0){
             hasAuthorization = true;
-            String[] roleAry = StringUtils.split(role, ",");
-            for(String roleStr : roleAry){
-                simpleAuthorInfo.addRole(StringUtils.trim(roleStr));
+            for(TRole role : roleList){
+                simpleAuthorInfo.addRole(StringUtils.trim(role.getRoName()));
             }
         }
-        if(StringUtils.isNotEmpty(permission)){
+        if(permissionList != null && permissionList.size() > 0){
             hasAuthorization = true;
-            String[] permissionAry = StringUtils.split(permission, ",");
-            for(String permissionStr : permissionAry){
-                simpleAuthorInfo.addStringPermission(StringUtils.trim(permissionStr));
+            for(TPermission permission : permissionList){
+                simpleAuthorInfo.addStringPermission(StringUtils.trim(permission.getPeName()));
             }
         }
 
@@ -84,17 +90,17 @@ public class MyAuthorizingRealm extends AuthorizingRealm {
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        UsernamePasswordToken token = (UsernamePasswordToken)authenticationToken;
-        if(userNameSet.contains(token.getUsername())){
-            AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-                    token.getUsername(),
-                    userPasswordMap.get(token.getUsername()),
-                    new SimpleByteSource("abc"),
-                    this.getName());
-            token.setRememberMe(true);
-            return authenticationInfo;
+        MyUsernamePasswordToken token = (MyUsernamePasswordToken)authenticationToken;
+        if(token.getUser() == null){
+            return null;
         }
-        return null;
+
+        AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
+                token.getUser().getId(),
+                token.getUser().getPassword(),
+                new SimpleByteSource(token.getUser().getSalt()),
+                this.getName());
+        return authenticationInfo;
     }
 
     public static void main(String[] args) {

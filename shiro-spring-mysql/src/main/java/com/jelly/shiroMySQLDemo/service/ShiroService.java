@@ -20,6 +20,10 @@ public class ShiroService {
     @Resource
     SqlSessionTemplate sqlSessionTemplate;
 
+    public TUser getUserById(String id){
+        return sqlSessionTemplate.selectOne(TUser.SelectByPk, id);
+    }
+
     public TUser getUserByUsername(String username){
         return sqlSessionTemplate.selectOne(TUser.Select, new TUser().setUsername(username));
     }

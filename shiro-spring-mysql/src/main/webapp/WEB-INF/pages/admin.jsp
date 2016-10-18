@@ -16,6 +16,13 @@
 <a href="${contextPath}/adminAdd" >adminAdd</a><br/>
 <a href="${contextPath}/adminDelete" >adminDelete</a><br/>
 <hr/>
+<a href="${contextPath}/" >index</a><br/>
+
+<c:forEach var="resource" items="${resourceList}">
+    <a href="${contextPath}/${resource.rePath}" >${resource.reName}</a><br/>
+</c:forEach>
+
+<hr/>
 <h2> shiro tag demo, has role </h2>
 <table class="eossFromTable" style="width: 500px; height: 100px;">
     <tr>

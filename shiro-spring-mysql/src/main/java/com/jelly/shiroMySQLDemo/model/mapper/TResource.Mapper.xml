@@ -16,6 +16,10 @@
 							RE_NAME,
                             </if>
 
+                            <if test="rePath != null and rePath != ''">
+							RE_PATH,
+                            </if>
+
 				</trim>
 			) values (
 				<trim suffixOverrides=",">
@@ -24,6 +28,9 @@
                             </if>
                             <if test="reName != null and reName != ''">
                                 #{reName},
+                            </if>
+                            <if test="rePath != null and rePath != ''">
+                                #{rePath},
                             </if>
 				</trim>
 			)
@@ -40,6 +47,9 @@
                     <if test="reName != null and reName != ''">
                     	RE_NAME = #{reName},
                     </if>
+                    <if test="rePath != null and rePath != ''">
+                    	RE_PATH = #{rePath},
+                    </if>
 		</trim>
         where
                 <if test="id != null and id != ''">
@@ -55,6 +65,7 @@
         <trim suffixOverrides=",">
 			ID = #{id},
 			RE_NAME = #{reName},
+			RE_PATH = #{rePath},
         </trim>
         where
 		ID = #{id}
@@ -83,6 +94,9 @@
                 <if test="reName != null and reName != ''">
 					RE_NAME = #{reName} and
                 </if>
+                <if test="rePath != null and rePath != ''">
+					RE_PATH = #{rePath} and
+                </if>
 		</trim>
 	</delete>
 
@@ -91,6 +105,7 @@
 		<trim suffixOverrides=",">
 				ID as "id",
 				RE_NAME as "reName",
+				RE_PATH as "rePath",
 		</trim>
 	</sql>
 	
@@ -101,6 +116,9 @@
                 </if>
                 <if test="reName != null and reName != ''">
                     and RE_NAME = #{reName}
+                </if>
+                <if test="rePath != null and rePath != ''">
+                    and RE_PATH = #{rePath}
                 </if>
 	</sql>
 	

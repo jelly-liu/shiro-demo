@@ -6,17 +6,17 @@
 <mapper namespace="Shiro">
     <!-- query roles of user -->
 	<select id="SelectRolesOfUser" parameterType="java.io.Serializable" resultType="com.jelly.shiroMySQLDemo.model.TRole">
-		select
-		<include refid="com.jelly.shiroMySQLDemo.model.TRole.SelectColumns"/>
-		FROM t_user_role a INNER JOIN t_role b
+		SELECT
+		DISTINCT b.RO_NAME as "roName"
+		FROM t_user_role a INNER JOIN t_role b ON a.role_id = b.id
 		WHERE 1 = 1
 		AND a.user_id = #{userId}
 	</select>
 
 	<!-- query permissions of user -->
 	<select id="SelectPermissionsOfUser" parameterType="java.io.Serializable" resultType="com.jelly.shiroMySQLDemo.model.TPermission">
-		select
-		<include refid="com.jelly.shiroMySQLDemo.model.TPermission.SelectColumns"/>
+		SELECT
+		DISTINCT d.PE_NAME AS "peName"
 		FROM t_user_role a
 		INNER JOIN t_role b ON a.role_id = b.id
 		INNER JOIN t_role_permission c ON a.role_id = c.role_id
@@ -27,10 +27,12 @@
 
 	<!-- query resources of user -->
 	<select id="SelectResourcesOfUser" parameterType="java.io.Serializable" resultType="com.jelly.shiroMySQLDemo.model.TResource">
-		select
-		<include refid="com.jelly.shiroMySQLDemo.model.TResource.SelectColumns"/>
+		SELECT
+		a.ID as "id",
+		a.RE_NAME as "reName",
+		a.RE_PATH as "rePath"
 		FROM t_resource a
-		INNER JOIN t_user_resource b ON a.id = b.user_id
+		INNER JOIN t_user_resource b ON a.id = b.resource_id
 		WHERE 1 = 1
 		AND b.user_id = #{userId}
 	</select>
