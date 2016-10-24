@@ -10,4 +10,5 @@ run classpath/resource/shiro.sql to create shiro database and init table and tab
 import shiro-demo to your IDE, build shiro-spring-mysql.war, deploy it to tomcat and run, that's all
 
 # shiro-pure demo screenshot
+![Shiro-Web-Class-Diagram](https://github.com/jelly-liu/shiro-demo/blob/master/Shiro-Web-Class-Diagram.png "Shiro-Web-Class-Diagram")  
 ![shiro-pure-demo](https://github.com/jelly-liu/shiro-demo/blob/master/shire_pure_demo.png "shiro-pure-demo")  
