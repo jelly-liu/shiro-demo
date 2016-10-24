@@ -2,12 +2,10 @@ package com.jelly.shiroMySQLDemo.shiro;
 
 import com.jelly.shiroMySQLDemo.model.TPermission;
 import com.jelly.shiroMySQLDemo.model.TRole;
+import com.jelly.shiroMySQLDemo.model.TUser;
 import com.jelly.shiroMySQLDemo.service.ShiroService;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.crypto.hash.SimpleHash;
@@ -29,35 +27,6 @@ public class MyAuthorizingRealm extends AuthorizingRealm {
     @Resource
     ShiroService shiroService;
 
-    /*private Set<String> userNameSet = new HashSet();
-    private Map<String, String> userPasswordMap = new HashMap();
-    private Map<String, String> userRolesMap = new HashMap();
-    private Map<String, String> userPermissionMap = new HashMap();
-
-    {
-        userNameSet.add("adminSuper");
-        userNameSet.add("adminList");
-        userNameSet.add("adminAdd");
-        userNameSet.add("adminDelete");
-
-        //password is 123, salt is abc
-        userPasswordMap.put("adminSuper", "e99a18c428cb38d5f260853678922e03");
-        userPasswordMap.put("adminList", "e99a18c428cb38d5f260853678922e03");
-        userPasswordMap.put("adminAdd", "e99a18c428cb38d5f260853678922e03");
-        userPasswordMap.put("adminDelete", "e99a18c428cb38d5f260853678922e03");
-
-        userRolesMap.put("adminSuper", "roleSuper, roleList, roleAdd, roleDelete");
-        userRolesMap.put("adminList", "roleList");
-        userRolesMap.put("adminAdd", "roleAdd");
-        userRolesMap.put("adminDelete", "roleDelete");
-
-//        userPermissionMap.put("adminSuper", "*");
-        userPermissionMap.put("adminSuper", "admin:list, admin:add, admin:delete");
-        userPermissionMap.put("adminList", "admin:list");
-        userPermissionMap.put("adminAdd", "admin:add");
-        userPermissionMap.put("adminDelete", "admin:delete");
-    }*/
-
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         String userId = (String)principalCollection.fromRealm(this.getName()).iterator().next();
@@ -65,6 +34,7 @@ public class MyAuthorizingRealm extends AuthorizingRealm {
 
         boolean hasAuthorization = false;
 
+        //load roles and permissions
         List<TRole> roleList = shiroService.getRoleOfUser(userId);
         List<TPermission> permissionList = shiroService.getPermissionsOfUser(userId);
 
@@ -90,15 +60,19 @@ public class MyAuthorizingRealm extends AuthorizingRealm {
 
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        MyUsernamePasswordToken token = (MyUsernamePasswordToken)authenticationToken;
-        if(token.getUser() == null){
+        UsernamePasswordToken token = (UsernamePasswordToken)authenticationToken;
+
+        //only do check out user is exit or not, do not need do password matching
+        TUser user = shiroService.getUserByUsername(token.getUsername());
+        if(user == null){
             return null;
         }
 
+        //pick out stored password and salt to AuthenticationInfo
         AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-                token.getUser().getId(),
-                token.getUser().getPassword(),
-                new SimpleByteSource(token.getUser().getSalt()),
+                user.getId() + "," + user.getUsername() + "," + user.getPassword(),
+                user.getPassword(),
+                new SimpleByteSource(user.getSalt()),
                 this.getName());
         return authenticationInfo;
     }

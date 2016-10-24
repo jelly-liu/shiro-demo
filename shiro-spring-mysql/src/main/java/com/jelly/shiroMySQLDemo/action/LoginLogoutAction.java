@@ -3,7 +3,6 @@ package com.jelly.shiroMySQLDemo.action;
 import com.jelly.shiroMySQLDemo.model.TResource;
 import com.jelly.shiroMySQLDemo.model.TUser;
 import com.jelly.shiroMySQLDemo.service.ShiroService;
-import com.jelly.shiroMySQLDemo.shiro.MyUsernamePasswordToken;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -39,12 +38,11 @@ public class LoginLogoutAction {
         String password = request.getParameter("password");
         String rememberMe = request.getParameter("rememberMe");
 
-        TUser user = shiroService.getUserByUsername(username);
+        //TODO, here you can do logic of verification code
 
         Subject subject = SecurityUtils.getSubject();
-
-        MyUsernamePasswordToken token = new MyUsernamePasswordToken(user.getId(), password);
-        token.setUser(user);
+        TUser user = shiroService.getUserByUsername(username);
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getId(), password);
 
         String msg = null;
         try {
