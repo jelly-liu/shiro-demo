@@ -1,3 +1,5 @@
+# advanced here https://github.com/jelly-liu/EOSS
+
 # shiro-demo
 shiro-pure demo shows how to use the basic shiro.ini, and shiro tags  
 shiro-mysql demo shows how to improve, use mysql and Cryptography, etc, not complete yet...  
