@@ -7,34 +7,31 @@
 </head>
 <body>
 <%@ include file="/WEB-INF/pages/include/topLoginOut.jsp" %>
-<hr/>
-<h2> shiro tag demo, try to access url </h2>
+
+----------------------------------- all resources -----------------------------------<br/>
 <a href="${contextPath}/" >index</a><br/>
 <a href="${contextPath}/admin" >admin</a><br/>
 <a href="${contextPath}/adminSuper" >adminSuper</a><br/>
 <a href="${contextPath}/adminList" >adminList</a><br/>
 <a href="${contextPath}/adminAdd" >adminAdd</a><br/>
 <a href="${contextPath}/adminDelete" >adminDelete</a><br/>
-<hr/>
-<a href="${contextPath}/" >index</a><br/>
-
+----------------------------------- my resources -----------------------------------<br/>
 <c:forEach var="resource" items="${resourceList}">
-    <a href="${contextPath}/${resource.rePath}" >${resource.reName}</a><br/>
+    <a href="${contextPath}${resource.rePath}" >${resource.reName}</a><br/>
 </c:forEach>
-
-<hr/>
-<h2> shiro tag demo, has role </h2>
+----------------------------------- has role -----------------------------------<br/>
 <table class="eossFromTable" style="width: 500px; height: 100px;">
     <tr>
         <td >id:</td>
         <td>name</td>
-        <td>list</td>
-        <td>add</td>
-        <td>delete</td>
+        <td>roleList</td>
+        <td>roleAdd</td>
+        <td>roleDelete</td>
+        <td>roleSuper</td>
     </tr>
     <tr>
         <td>101</td>
-        <td>lion</td>
+        <td><shiro:principal/></td>
         <td>
             <shiro:hasRole name="roleList">
                 <a href="${contextPath}/adminList" >adminList</a>
@@ -59,21 +56,31 @@
                 <a href="##" >Sorry</a>
             </shiro:lacksRole>
         </td>
+        <td>
+            <shiro:hasRole name="roleSuper">
+                <a href="${contextPath}/adminSuper" >adminDelete</a>
+            </shiro:hasRole>
+            <shiro:lacksRole name="roleSuper">
+                <a href="##" >Sorry</a>
+            </shiro:lacksRole>
+        </td>
     </tr>
 </table>
 <hr/>
-<h2>shiro tag demo, has hasPermission </h2>
+----------------------------------- has hasPermission -----------------------------------<br/>
 <table class="eossFromTable" style="width: 500px; height: 100px;">
     <tr>
         <td>id:</td>
         <td>name</td>
-        <td>list</td>
-        <td>add</td>
-        <td>delete</td>
+        <td>admin:list</td>
+        <td>admin:add</td>
+        <td>admin:delete</td>
+        <td>admin:*</td>
+        <td>*</td>
     </tr>
     <tr>
         <td>101</td>
-        <td>lion</td>
+        <td><shiro:principal/></td>
         <td>
             <shiro:hasPermission name="admin:list">
                 <a href="${contextPath}/adminList" >adminList</a>
@@ -95,6 +102,22 @@
                 <a href="${contextPath}/adminDelete" >adminDelete</a>
             </shiro:hasPermission>
             <shiro:lacksPermission name="admin:delete">
+                <a href="##" >Sorry</a>
+            </shiro:lacksPermission>
+        </td>
+        <td>
+            <shiro:hasPermission name="admin:*">
+                <a href="${contextPath}/adminDelete" >adminDelete</a>
+            </shiro:hasPermission>
+            <shiro:lacksPermission name="admin:*">
+                <a href="##" >Sorry</a>
+            </shiro:lacksPermission>
+        </td>
+        <td>
+            <shiro:hasPermission name="*">
+                <a href="${contextPath}/adminDelete" >adminDelete</a>
+            </shiro:hasPermission>
+            <shiro:lacksPermission name="*">
                 <a href="##" >Sorry</a>
             </shiro:lacksPermission>
         </td>

@@ -41,8 +41,7 @@ public class LoginLogoutAction {
         //TODO, here you can do logic of verification code
 
         Subject subject = SecurityUtils.getSubject();
-        TUser user = shiroService.getUserByUsername(username);
-        UsernamePasswordToken token = new UsernamePasswordToken(user.getId(), password);
+        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 
         String msg = null;
         try {
@@ -77,6 +76,7 @@ public class LoginLogoutAction {
         token.clear();
 
         //fetch all resources of user
+        TUser user = shiroService.getUserByUsername(username);
         List<TResource> resourceList = shiroService.getResourcesOfUser(user.getId());
 
         ModelAndView modelAndView = new ModelAndView();
@@ -86,7 +86,7 @@ public class LoginLogoutAction {
         }else{
             request.setAttribute("resourceList", resourceList);
             modelAndView.addObject("resourceList", resourceList);
-            modelAndView.setViewName("admin");
+            modelAndView.setViewName("/admin");
         }
 
         return modelAndView;
@@ -97,7 +97,7 @@ public class LoginLogoutAction {
         Subject currentUser = SecurityUtils.getSubject();
         currentUser.logout();
         request.setAttribute("msg", "user click logout");
-        ModelAndView modelAndView = new ModelAndView("redirect:/");
+        ModelAndView modelAndView = new ModelAndView("redirect:/toLogin");
         return modelAndView;
     }
 }

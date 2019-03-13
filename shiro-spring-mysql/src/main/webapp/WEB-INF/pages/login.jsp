@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false"%>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <%@ include file="/WEB-INF/pages/include/topInc.jsp" %>
 <html>
 <head>
@@ -6,26 +6,22 @@
     <%@ include file="/WEB-INF/pages/include/topHead.jsp" %>
 </head>
 <body>
-<form action="${contextPath}/login" method="post" class="eossForm">
-    <table class="eossFromTable" style="width: 300px; height: 100px;">
-        <tr>
-            <td align="right">username:</td>
-            <td><input name="username" type="text" value="admin"/></td>
-        </tr>
-        <tr>
-            <td align="right">password:</td>
-            <td><input name="password" type="text" value="123"/></td>
-        </tr>
-        <tr>
-            <td align="right">rememberMe:</td>
-            <td><input name="rememberMe" type="checkbox" /></td>
-        </tr>
-        <tr>
-            <td colspan="99" align="center">
-                <input type="submit" value="submit"/>${msg}
-            </td>
-        </tr>
-    </table>
-</form>
+<div class="container">
+    <form action="${contextPath}/login" method="post">
+        <div class="form-group">
+            <label for="username">username</label>
+            <input id="username" name="username" value="adminSuper" class="form-control" placeholder="enter username">
+        </div>
+        <div class="form-group">
+            <label for="password">password</label>
+            <input id="password" name="password" type="password" value="111111" class="form-control" placeholder="enter password">
+        </div>
+        <div class="form-group form-check">
+            <input id="rememberMe" name="rememberMe" type="checkbox" class="form-check-input">
+            <label class="form-check-label" for="rememberMe">rememberMe</label>
+        </div>
+        <button id="submitBtn" type="submit" class="btn btn-primary">Sign In</button>
+    </form>
+</div>
 </body>
 </html>

@@ -29,33 +29,26 @@ public class MyAuthorizingRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        String userId = (String)principalCollection.fromRealm(this.getName()).iterator().next();
-        SimpleAuthorizationInfo simpleAuthorInfo = new SimpleAuthorizationInfo();
 
-        boolean hasAuthorization = false;
+        String userId = (String)principalCollection.getPrimaryPrincipal();
+        SimpleAuthorizationInfo simpleAuthorInfo = new SimpleAuthorizationInfo();
 
         //load roles and permissions
         List<TRole> roleList = shiroService.getRoleOfUser(userId);
         List<TPermission> permissionList = shiroService.getPermissionsOfUser(userId);
 
         if(roleList != null && roleList.size() > 0){
-            hasAuthorization = true;
             for(TRole role : roleList){
                 simpleAuthorInfo.addRole(StringUtils.trim(role.getRoName()));
             }
         }
         if(permissionList != null && permissionList.size() > 0){
-            hasAuthorization = true;
             for(TPermission permission : permissionList){
                 simpleAuthorInfo.addStringPermission(StringUtils.trim(permission.getPeName()));
             }
         }
 
-        if(hasAuthorization){
-            return simpleAuthorInfo;
-        }
-
-        return null;
+        return simpleAuthorInfo;
     }
 
     @Override
@@ -70,7 +63,7 @@ public class MyAuthorizingRealm extends AuthorizingRealm {
 
         //pick out stored password and salt to AuthenticationInfo
         AuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
-                user.getId() + "," + user.getUsername() + "," + user.getPassword(),
+                user.getId(),//at here, set an unique principal
                 user.getPassword(),
                 new SimpleByteSource(user.getSalt()),
                 this.getName());
