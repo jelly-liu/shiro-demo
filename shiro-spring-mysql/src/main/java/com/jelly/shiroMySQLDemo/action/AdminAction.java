@@ -11,28 +11,27 @@ import java.io.IOException;
 @Controller
 public class AdminAction {
     @RequestMapping("/admin")
-    public ModelAndView admin(HttpServletRequest request, HttpServletResponse response){
-        ModelAndView modelAndView = new ModelAndView("admin");
-        return modelAndView;
+    public ModelAndView admin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        return new ModelAndView("admin");
     }
 
     @RequestMapping("/adminList")
     public void adminList(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.getWriter().write("<h1>AdminListPage</h1>");
+        response.getWriter().write("<h1>adminList</h1>");
     }
 
     @RequestMapping("/adminAdd")
     public void adminAdd(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.getWriter().write("<h1>AdminAddPage</h1>");
+        response.getWriter().write("<h1>adminAdd</h1>");
     }
 
     @RequestMapping("/adminDelete")
     public void adminDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.getWriter().write("<h1>AdminDeletePage</h1>");
+        response.getWriter().write("<h1>adminDelete</h1>");
     }
 
-    @RequestMapping("/adminSuper")
+    @RequestMapping("/adminUpdate")
     public void adminSuper(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.getWriter().write("<h1>AdminSuperPage</h1>");
+        response.getWriter().write("<h1>adminUpdate</h1>");
     }
 }

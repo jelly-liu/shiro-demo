@@ -8,6 +8,7 @@
         http://www.springframework.org/schema/util/spring-util.xsd">
 
     <bean id="roleOr" class="com.jelly.shiroMySQLDemo.shiro.RoleOrAuthorizationFilter"/>
+    <bean id="permOr" class="com.jelly.shiroMySQLDemo.shiro.PermOrAuthorizationFilter"/>
 
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean" depends-on="roleOr">
         <property name="securityManager" ref="securityManager"/>
@@ -16,6 +17,7 @@
         <property name="filters">
             <util:map>
                 <entry key="roleOr" value-ref="roleOr"/>
+                <entry key="permOr" value-ref="permOr"/>
             </util:map>
         </property>
         <property name="filterChainDefinitions">
@@ -23,11 +25,16 @@
                 /static/**=anon
                 /test/**=anon
                 /login=anon
+
                 /admin=authc
                 /adminList=authc, roleOr[roleList, roleSuper]
                 /adminAdd=authc, roleOr[roleAdd, roleSuper]
                 /adminDelete=authc, roleOr[roleDelete, roleSuper]
                 /adminSuper=authc, roleOr[roleSuper]
+
+                /tom*=authc, permOr[tom:list,tom:add,tom:delete,tom:update]
+
+                /*=authc
             </value>
         </property>
     </bean>

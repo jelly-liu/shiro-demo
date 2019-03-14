@@ -9,17 +9,29 @@
 <%@ include file="/WEB-INF/pages/include/topLoginOut.jsp" %>
 
 ----------------------------------- all resources -----------------------------------<br/>
-<a href="${contextPath}/" >index</a><br/>
-<a href="${contextPath}/admin" >admin</a><br/>
-<a href="${contextPath}/adminSuper" >adminSuper</a><br/>
-<a href="${contextPath}/adminList" >adminList</a><br/>
-<a href="${contextPath}/adminAdd" >adminAdd</a><br/>
-<a href="${contextPath}/adminDelete" >adminDelete</a><br/>
------------------------------------ my resources -----------------------------------<br/>
-<c:forEach var="resource" items="${resourceList}">
-    <a href="${contextPath}${resource.rePath}" >${resource.reName}</a><br/>
+<a href="${contextPath}/" >index</a>&nbsp;&nbsp;
+<a href="${contextPath}/admin" >admin</a>&nbsp;&nbsp;
+<a href="${contextPath}/adminSuper" >adminSuper</a>&nbsp;&nbsp;
+<a href="${contextPath}/adminList" >adminList</a>&nbsp;&nbsp;
+<a href="${contextPath}/adminAdd" >adminAdd</a>&nbsp;&nbsp;
+<a href="${contextPath}/adminDelete" >adminDelete</a>&nbsp;&nbsp;
+<a href="${contextPath}/tomList" >tomList</a>&nbsp;&nbsp;
+<a href="${contextPath}/tomAdd" >tomAdd</a>&nbsp;&nbsp;
+<a href="${contextPath}/tomDelete" >tomDelete</a>&nbsp;&nbsp;
+<a href="${contextPath}/tomUpdate" >tomUpdate</a>&nbsp;&nbsp;
+<br>----------------------------------- my resources -----------------------------------<br/>
+<c:forEach var="resource" items="${subject_resources}">
+    <a href="${contextPath}${resource.rePath}" >${resource.reName}</a>&nbsp;&nbsp;
 </c:forEach>
------------------------------------ has role -----------------------------------<br/>
+<br>----------------------------------- my roles -----------------------------------<br/>
+<c:forEach var="role" items="${subject_roles}">
+    ${role.roName}&nbsp;&nbsp;
+</c:forEach>
+<br>----------------------------------- my perms -----------------------------------<br/>
+<c:forEach var="perm" items="${subject_perms}">
+    ${perm.peName}&nbsp;&nbsp;
+</c:forEach>
+<br>----------------------------------- has role -----------------------------------<br/>
 <table class="eossFromTable" style="width: 500px; height: 100px;">
     <tr>
         <td >id:</td>
@@ -30,8 +42,8 @@
         <td>roleSuper</td>
     </tr>
     <tr>
-        <td>101</td>
-        <td><shiro:principal/></td>
+        <td>${subject_user.id}</td>
+        <td>${subject_user.username}</td>
         <td>
             <shiro:hasRole name="roleList">
                 <a href="${contextPath}/adminList" >adminList</a>
@@ -66,10 +78,9 @@
         </td>
     </tr>
 </table>
-<hr/>
------------------------------------ has hasPermission -----------------------------------<br/>
-<table class="eossFromTable" style="width: 500px; height: 100px;">
-    <tr>
+<br>----------------------------------- has hasPer -----------------------------------<br/>
+<table class="eossDataTable" style="width: 500px; height: 100px;">
+    <tr class="datagrid-header">
         <td>id:</td>
         <td>name</td>
         <td>admin:list</td>
@@ -79,8 +90,8 @@
         <td>*</td>
     </tr>
     <tr>
-        <td>101</td>
-        <td><shiro:principal/></td>
+        <td>${subject_user.id}</td>
+        <td>${subject_user.username}</td>
         <td>
             <shiro:hasPermission name="admin:list">
                 <a href="${contextPath}/adminList" >adminList</a>

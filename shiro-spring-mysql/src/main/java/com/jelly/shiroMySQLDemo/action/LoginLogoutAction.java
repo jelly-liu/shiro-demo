@@ -1,6 +1,8 @@
 package com.jelly.shiroMySQLDemo.action;
 
+import com.jelly.shiroMySQLDemo.model.TPermission;
 import com.jelly.shiroMySQLDemo.model.TResource;
+import com.jelly.shiroMySQLDemo.model.TRole;
 import com.jelly.shiroMySQLDemo.model.TUser;
 import com.jelly.shiroMySQLDemo.service.ShiroService;
 import org.apache.commons.lang3.StringUtils;
@@ -38,8 +40,6 @@ public class LoginLogoutAction {
         String password = request.getParameter("password");
         String rememberMe = request.getParameter("rememberMe");
 
-        //TODO, here you can do logic of verification code
-
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
 
@@ -75,18 +75,25 @@ public class LoginLogoutAction {
         }
         token.clear();
 
-        //fetch all resources of user
+        //load user info
         TUser user = shiroService.getUserByUsername(username);
-        List<TResource> resourceList = shiroService.getResourcesOfUser(user.getId());
+        List<TResource> resources = shiroService.getResourcesOfUser(user.getId());
+
+        //load roles and permissions
+        List<TRole> roles = shiroService.getRoleOfUser(user.getId());
+        List<TPermission> perms = shiroService.getPermissionsOfUser(user.getId());
+
+        subject.getSession().setAttribute("user", user);
+        subject.getSession().setAttribute("resources", resources);
+        subject.getSession().setAttribute("roles", roles);
+        subject.getSession().setAttribute("perms", perms);
 
         ModelAndView modelAndView = new ModelAndView();
         if(msg != null){
             request.setAttribute("msg", msg);
             modelAndView.setViewName("login");
         }else{
-            request.setAttribute("resourceList", resourceList);
-            modelAndView.addObject("resourceList", resourceList);
-            modelAndView.setViewName("/admin");
+            modelAndView.setViewName("redirect:/admin");
         }
 
         return modelAndView;
